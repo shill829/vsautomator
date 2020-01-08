@@ -2,6 +2,7 @@ package viewspotautomator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -33,7 +34,9 @@ public class PackageListManager {
 	public PackageListManager(Device d) throws IOException, JadbException {
 		packs1 = TaskProcessor.listPackages(d.getDevice());		
 		ArrayList<Package> packlist = new ArrayList(packs1);
-		JFrame packManager = new JFrame("ViewSpot Automator- Package List " + d.getDevice());// Setup window
+		PackComparator pc=new PackComparator();
+		Collections.sort(packlist, pc);
+		JFrame packManager = new JFrame("VSauto Package List " + d.toString());// Setup window
 		packManager.setSize(532, 567);
 		packManager.getContentPane().setLayout(null);
 
@@ -77,6 +80,7 @@ public class PackageListManager {
 					y.printStackTrace();
 				}
 				ArrayList<Package> packlist = new ArrayList(packs1);
+				Collections.sort(packlist, pc);
 				packs.clear();
 				for (int x = 0; x < packlist.size(); x++) {
 					packs.addElement(packlist.get(x).toString());
@@ -107,6 +111,7 @@ public class PackageListManager {
 					e.printStackTrace();
 				}
 				ArrayList<Package> packlist = new ArrayList(packs1);
+				Collections.sort(packlist, pc);
 				packs.clear();
 				for (int x = 0; x < packlist.size(); x++) {
 					packs.addElement(packlist.get(x).toString());
