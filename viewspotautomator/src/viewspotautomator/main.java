@@ -12,6 +12,7 @@ public class main {
 		String command ="adb devices";
 		ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
 		processBuilder.directory(new File("/"));
+		@SuppressWarnings("unused")
 		Process adb = processBuilder.start();		
 		@SuppressWarnings("unused")
 		Automator a = new Automator();

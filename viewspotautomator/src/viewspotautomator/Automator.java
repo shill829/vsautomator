@@ -207,11 +207,43 @@ public class Automator {
 		primary.getContentPane().add(doBlockerOff);
 
 		JButton doWifiOn = new JButton("Wifi On");
+		doWifiOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int x = 0; x < queueDevList.size(); x++) {
+					try {
+						TaskProcessor.enableWifi(queueDevList.get(x));
+					} catch (IOException | JadbException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}			
+				queueDevList.clear();
+				queueDevs.clear();
+				queuedDevices.revalidate();
+			}
+			
+		});
 		doWifiOn.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doWifiOn.setBounds(403, 424, 89, 23);
 		primary.getContentPane().add(doWifiOn);
 
 		JButton doWifiOff = new JButton("Wifi off");
+		doWifiOff.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int x = 0; x < queueDevList.size(); x++) {
+					try {
+						TaskProcessor.disableWifi(queueDevList.get(x));
+					} catch (IOException | JadbException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}			
+				queueDevList.clear();
+				queueDevs.clear();
+				queuedDevices.revalidate();
+			}
+		});
+		doWifiOff.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doWifiOn.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doWifiOff.setBounds(535, 423, 89, 23);
 		primary.getContentPane().add(doWifiOff);
@@ -401,6 +433,21 @@ public class Automator {
 		doInstallApp.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doInstallApp.setBounds(535, 473, 89, 23);
 		primary.getContentPane().add(doInstallApp);
+		
+		JButton doPackMan = new JButton("Package Manager");
+		doPackMan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new PackageListManager(selected);
+				} catch (IOException | JadbException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		doPackMan.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		doPackMan.setBounds(140, 401, 106, 23);
+		primary.getContentPane().add(doPackMan);
 
 		primary.setVisible(true);// should be at end of method
 	}

@@ -1,7 +1,6 @@
 package viewspotautomator;
 
 import java.io.File;
-import java.io.Reader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +90,20 @@ public class TaskProcessor {
 		pm.install(f);
 	}
 
+	public static void removeApp(Device d, Package p) throws IOException, JadbException {
+		UpdatedPackageManager pm = new UpdatedPackageManager(d.getDevice());
+		pm.uninstall(p);
+	}
+	
+	public static void forceStopApp(Device d,Package p) throws IOException, JadbException {
+
+		d.getDevice().executeShell("am force-stop "+p,"");
+	}
+	
+	public static void launchApp(Device d,Package p) throws IOException, JadbException {
+		d.getDevice().executeShell("monkey -p "+p+" -c android.intent.category.LAUNCHER 1","");
+	}
+
 	public static String isSettingsBlockerOn(Device d) throws IOException, JadbException {// check if ViewSpot settings
 																							// blocker is enabled
 		String result = "Enabled";
@@ -120,6 +133,7 @@ public class TaskProcessor {
 	}
 
 	public static void disableSettingsBlocker(Device d) throws IOException, JadbException {// disable ViewSpot settings
+
 																							// blocker
 
 		if (d.getBlockerStatus() == "Enabled") {
@@ -130,6 +144,15 @@ public class TaskProcessor {
 			d.updateDevice();
 		}
 
+	}
+	
+	
+	public static void enableWifi(Device d) throws IOException, JadbException {
+		d.getDevice().executeShell("svc wifi enable");
+	}
+	
+	public static void disableWifi(Device d) throws IOException, JadbException {
+		d.getDevice().executeShell("svc wifi disable");
 	}
 
 	public static void connectToWifi(Device d, String ssid, String pw)
@@ -189,60 +212,56 @@ public class TaskProcessor {
 		kill.start();
 		d.getDevice().executeShell("am start -n com.steinwurf.adbjoinwifi/.MainActivity -e ssid " + ssid, "");
 	}
-	
-	public static void refreshLogs(Device d) throws IOException, JadbException, InterruptedException  {
-		d.getDevice().executeShell("am start -n "+d.getPackName()+"/com.customermobile.demo.MainTab","");
-		d.getDevice().executeShell("input tap 400 400","");
-		d.getDevice().executeShell("input keyevent KEYCODE_HOME","");
-		d.getDevice().executeShell("am start -n "+d.getPackName()+"/com.customermobile.demo.MainTab","");
+
+	public static void refreshLogs(Device d) throws IOException, JadbException, InterruptedException {
+		d.getDevice().executeShell("am start -n " + d.getPackName() + "/com.customermobile.demo.MainTab", "");
+		d.getDevice().executeShell("input tap 400 400", "");
+		d.getDevice().executeShell("input keyevent KEYCODE_HOME", "");
+		d.getDevice().executeShell("am start -n " + d.getPackName() + "/com.customermobile.demo.MainTab", "");
 	}
-	
+
 	public static void rebootDevice(Device d) throws IOException, JadbException {
-		d.getDevice().executeShell("reboot -p","");
+		d.getDevice().executeShell("reboot -p", "");
 	}
-	
+
 	public static String getChargeType(Device d) throws IOException, JadbException {
-		String rawString=convertStreamToString(d.getDevice().execute("dumpsys battery | grep","powered:"));
-		String result="error";
-		if(rawString.contains("AC powered: true")) {
-			result="AC_Charging";
+		String rawString = convertStreamToString(d.getDevice().execute("dumpsys battery | grep", "powered:"));
+		String result = "error";
+		if (rawString.contains("AC powered: true")) {
+			result = "AC_Charging";
+		} else if (rawString.contains("USB powered: true")) {
+			result = "USB_Charging";
+		} else if (rawString.contains("Wireless powered: true")) {
+			result = "Wireless_Charging";
+		} else if (rawString.contains("MOD powered: true")) {
+			result = "MOD_Charging";
 		}
-		else if(rawString.contains("USB powered: true")) {
-			result="USB_Charging";
-		}		
-		else if(rawString.contains("Wireless powered: true")) {
-			result="Wireless_Charging";
-		}
-		else if(rawString.contains("MOD powered: true")) {
-			result="MOD_Charging";
-		}
-		
-		return result;		
+
+		return result;
 	}
-	
+
 	public static String tester(Device d) throws IOException, JadbException {
-		
-		String command=("cat /proc/uptime |cut -c1-9 |tr -d .");
-		String[] cmdArray=command.split(" ");
-		String args="";
-		for(int i=0;i<cmdArray.length;i++) {
-			
+
+		String command = ("cat /proc/uptime |cut -c1-9 |tr -d .");
+		String[] cmdArray = command.split(" ");
+		for (int i = 0; i < cmdArray.length; i++) {
+
 		}
-		String x=TaskProcessor.convertStreamToString(d.getDevice().executeShell(command));
-			
+		String x = TaskProcessor.convertStreamToString(d.getDevice().executeShell(command));
+
 		return x;
 	}
-	public static String escapeMetaCharacters(String inputString){
-	    final String[] metaCharacters = {"\\","^","$","{","}","[","]","(",")",".","*","+","?","|","<",">","-","&","%"};
 
-	    for (int i = 0 ; i < metaCharacters.length ; i++){
-	        if(inputString.contains(metaCharacters[i])){
-	            inputString = inputString.replace(metaCharacters[i],"\\"+metaCharacters[i]);
-	        }
-	    }
-	    return inputString;
+	public static String escapeMetaCharacters(String inputString) {
+		final String[] metaCharacters = { "\\", "^", "$", "{", "}", "[", "]", "(", ")", ".", "*", "+", "?", "|", "<",
+				">", "-", "&", "%" };
+
+		for (int i = 0; i < metaCharacters.length; i++) {
+			if (inputString.contains(metaCharacters[i])) {
+				inputString = inputString.replace(metaCharacters[i], "\\" + metaCharacters[i]);
+			}
+		}
+		return inputString;
 	}
 
-
 }
-	
