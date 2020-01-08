@@ -137,56 +137,6 @@ public class Automator {
 		removeFromQueueButton.setBounds(281, 164, 89, 23);
 		primary.getContentPane().add(removeFromQueueButton);
 
-		JButton runTasks = new JButton("Run Selected Tasks");// Run selected tasks
-		runTasks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-
-					if (tasks.get(0)) {
-						for (int x = 0; x < queueDevList.size(); x++) {
-							@SuppressWarnings("unused")
-							List<se.vidstige.jadb.managers.Package> installedApps = new ArrayList<se.vidstige.jadb.managers.Package>();
-							// installedApps = TaskProcessor.listPackages(queueDevList.get(x));
-						}
-					}
-					if (tasks.get(1)) {
-						File toInstall = FileSelector.pickFile();
-						for (int x = 0; x < queueDevList.size(); x++) {
-							TaskProcessor.installApp(queueDevList.get(x), toInstall);
-						}
-						JOptionPane.showMessageDialog(primary, "App install complete");
-					}
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JadbException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		runTasks.setBounds(461, 517, 163, 33);
-		primary.getContentPane().add(runTasks);
-
-		JCheckBox doListPackages = new JCheckBox("List Packages");// currently unused
-		doListPackages.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tasks.set(0, doListPackages.getModel().isSelected());
-			}
-		});
-		doListPackages.setBounds(25, 438, 97, 23);
-		primary.getContentPane().add(doListPackages);
-
-		JCheckBox doInstallFile = new JCheckBox("Install Files");// install file
-		doInstallFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				tasks.set(1, doInstallFile.getModel().isSelected());
-			}
-		});
-		doInstallFile.setBounds(25, 464, 97, 23);
-		primary.getContentPane().add(doInstallFile);
-
 		JButton doEnableBlocker = new JButton("Blocker on");// settings blocker on
 		doEnableBlocker.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doEnableBlocker.addActionListener(new ActionListener() {
@@ -359,7 +309,7 @@ public class Automator {
 
 		});
 		doRebootDevice.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		doRebootDevice.setBounds(362, 527, 89, 23);
+		doRebootDevice.setBounds(403, 497, 89, 23);
 		primary.getContentPane().add(doRebootDevice);
 
 		JButton doRefreshDevs = new JButton("Refresh");
@@ -415,8 +365,42 @@ public class Automator {
 			}
 		});
 		doLoggerTest.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		doLoggerTest.setBounds(362, 502, 89, 23);
+		doLoggerTest.setBounds(403, 474, 89, 23);
 		primary.getContentPane().add(doLoggerTest);
+		
+		JButton doInstallApp = new JButton("Install File");
+		doInstallApp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File f=FileSelector.pickFile();
+				for (int x = 0; x < queueDevList.size(); x++) {
+					try {
+						TaskProcessor.installApp(queueDevList.get(x), f);
+					} catch (IOException | JadbException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				connDevs.clear();
+				try {
+					updateDevices();
+				} catch (IOException | JadbException | InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				for (int x = 0; x < devices.size(); x++) {
+					connDevs.addElement(devices.get(x).toString());
+				}
+				connectedDevices.revalidate();
+				queueDevList.clear();
+				queueDevs.clear();
+				queuedDevices.revalidate();
+
+			}
+			
+		});
+		doInstallApp.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		doInstallApp.setBounds(535, 473, 89, 23);
+		primary.getContentPane().add(doInstallApp);
 
 		primary.setVisible(true);// should be at end of method
 	}
