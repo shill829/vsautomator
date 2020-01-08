@@ -1,0 +1,2 @@
+# vsauto
+ViewSpot Automator
