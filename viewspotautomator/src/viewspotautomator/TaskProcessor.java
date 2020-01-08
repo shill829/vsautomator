@@ -94,14 +94,14 @@ public class TaskProcessor {
 		UpdatedPackageManager pm = new UpdatedPackageManager(d.getDevice());
 		pm.uninstall(p);
 	}
-	
-	public static void forceStopApp(Device d,Package p) throws IOException, JadbException {
 
-		d.getDevice().executeShell("am force-stop "+p,"");
+	public static void forceStopApp(Device d, Package p) throws IOException, JadbException {
+
+		d.getDevice().executeShell("am force-stop " + p, "");
 	}
-	
-	public static void launchApp(Device d,Package p) throws IOException, JadbException {
-		d.getDevice().executeShell("monkey -p "+p+" -c android.intent.category.LAUNCHER 1","");
+
+	public static void launchApp(Device d, Package p) throws IOException, JadbException {
+		d.getDevice().executeShell("monkey -p " + p + " -c android.intent.category.LAUNCHER 1", "");
 	}
 
 	public static String isSettingsBlockerOn(Device d) throws IOException, JadbException {// check if ViewSpot settings
@@ -134,7 +134,7 @@ public class TaskProcessor {
 
 	public static void disableSettingsBlocker(Device d) throws IOException, JadbException {// disable ViewSpot settings
 
-																							// blocker
+		// blocker
 
 		if (d.getBlockerStatus() == "Enabled") {
 			d.getDevice().executeShell("settings put secure enabled_accessibility_services 0 ",
@@ -145,12 +145,11 @@ public class TaskProcessor {
 		}
 
 	}
-	
-	
+
 	public static void enableWifi(Device d) throws IOException, JadbException {
 		d.getDevice().executeShell("svc wifi enable");
 	}
-	
+
 	public static void disableWifi(Device d) throws IOException, JadbException {
 		d.getDevice().executeShell("svc wifi disable");
 	}

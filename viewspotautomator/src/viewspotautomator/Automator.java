@@ -216,12 +216,12 @@ public class Automator {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				}			
+				}
 				queueDevList.clear();
 				queueDevs.clear();
 				queuedDevices.revalidate();
 			}
-			
+
 		});
 		doWifiOn.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doWifiOn.setBounds(403, 424, 89, 23);
@@ -237,7 +237,7 @@ public class Automator {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				}			
+				}
 				queueDevList.clear();
 				queueDevs.clear();
 				queuedDevices.revalidate();
@@ -371,14 +371,14 @@ public class Automator {
 		doLoggerTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for (int x = 0; x < queueDevList.size(); x++) {
-					
-						try {
-							LogProcessor.logTester(queueDevList.get(x));
-						} catch (IOException | JadbException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					
+
+					try {
+						LogProcessor.logTester(queueDevList.get(x));
+					} catch (IOException | JadbException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 				connDevs.clear();
 				try {
@@ -399,11 +399,11 @@ public class Automator {
 		doLoggerTest.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doLoggerTest.setBounds(403, 474, 89, 23);
 		primary.getContentPane().add(doLoggerTest);
-		
+
 		JButton doInstallApp = new JButton("Install File");
 		doInstallApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				File f=FileSelector.pickFile();
+				File f = FileSelector.pickFile();
 				for (int x = 0; x < queueDevList.size(); x++) {
 					try {
 						TaskProcessor.installApp(queueDevList.get(x), f);
@@ -428,12 +428,12 @@ public class Automator {
 				queuedDevices.revalidate();
 
 			}
-			
+
 		});
 		doInstallApp.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doInstallApp.setBounds(535, 473, 89, 23);
 		primary.getContentPane().add(doInstallApp);
-		
+
 		JButton doPackMan = new JButton("Package Manager");
 		doPackMan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -472,7 +472,7 @@ public class Automator {
 		 * System.out.println(devs.get(x)); System.out.println(); }
 		 * 
 		 */
-		
+
 	}
 
 	@PostConstruct

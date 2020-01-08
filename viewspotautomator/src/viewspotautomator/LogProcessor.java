@@ -80,7 +80,7 @@ public class LogProcessor {
 	 */
 	public static ArrayList<String> logTester(Device d) throws IOException, JadbException {
 
-		File testCases = new File("logtester.csv");		
+		File testCases = new File("logtester.csv");
 		ArrayList<ArrayList<String>> combined = parseDevLogs(getCurrLogs(d));
 		ArrayList<String> names = combined.get(0);
 		ArrayList<String> values = combined.get(1);
@@ -152,15 +152,15 @@ public class LogProcessor {
 			results.add(test);
 		}
 		results.add("Testing complete: " + numCorrect + " out of " + numValues + " correct.");
-		JFrame logTester = new JFrame("ViewSpot Automator- Log Testing "+d.getDevice());//Setup window
+		JFrame logTester = new JFrame("ViewSpot Automator- Log Testing " + d.getDevice());// Setup window
 		logTester.setSize(763, 567);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{727, 0};
-		gridBagLayout.rowHeights = new int[]{506, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWidths = new int[] { 727, 0 };
+		gridBagLayout.rowHeights = new int[] { 506, 0 };
+		gridBagLayout.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		logTester.getContentPane().setLayout(gridBagLayout);
-		JTextArea textArea = new JTextArea(727, 506);  
+		JTextArea textArea = new JTextArea(727, 506);
 		textArea.setFont(new Font("Monospaced", Font.PLAIN, 10));
 		textArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textArea);
@@ -171,14 +171,14 @@ public class LogProcessor {
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 0;
 		logTester.getContentPane().add(scrollPane, gbc_scrollPane);
-		for(int x=0;x<results.size();x++) {
+		for (int x = 0; x < results.size(); x++) {
 			textArea.append(results.get(x));
 			textArea.append("\n");
 		}
 		logTester.setVisible(true);
 		return results;
 	}
-	
+
 	@PostConstruct
 	public void createControls(Composite parent) {
 		System.out.println(this.getClass().getSimpleName() + " @PostConstruct method called.");

@@ -32,9 +32,9 @@ public class PackageListManager {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PackageListManager(Device d) throws IOException, JadbException {
-		packs1 = TaskProcessor.listPackages(d.getDevice());		
+		packs1 = TaskProcessor.listPackages(d.getDevice());
 		ArrayList<Package> packlist = new ArrayList(packs1);
-		PackComparator pc=new PackComparator();
+		PackComparator pc = new PackComparator();
 		Collections.sort(packlist, pc);
 		JFrame packManager = new JFrame("VSauto Package List " + d.toString());// Setup window
 		packManager.setSize(532, 567);
@@ -148,15 +148,15 @@ public class PackageListManager {
 		});
 		btnLaunch.setBounds(339, 389, 126, 23);
 		packManager.getContentPane().add(btnLaunch);
-		
+
 		JButton btnSelectViewspot = new JButton("Select ViewSpot");
 		btnSelectViewspot.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		btnSelectViewspot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!d.getPackName().contains("unknown")) {
-				Package p=new Package(d.getPackName());
-				selected=p;
-			}
+				if (!d.getPackName().contains("unknown")) {
+					Package p = new Package(d.getPackName());
+					selected = p;
+				}
 			}
 		});
 		btnSelectViewspot.setBounds(339, 361, 126, 23);

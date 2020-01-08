@@ -9,13 +9,12 @@ import se.vidstige.jadb.JadbException;
 public class main {
 
 	public static void main(String[] args) throws IOException, JadbException, InterruptedException {
-		String command ="adb devices";
+		String command = "adb devices";
 		ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
 		processBuilder.directory(new File("/"));
 		@SuppressWarnings("unused")
-		Process adb = processBuilder.start();		
+		Process adb = processBuilder.start();
 		@SuppressWarnings("unused")
 		Automator a = new Automator();
 	}
 }
-   
