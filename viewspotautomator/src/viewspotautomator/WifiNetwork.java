@@ -28,5 +28,14 @@ public class WifiNetwork {
 			return false;
 		}
 	}
+	
+	public Boolean isProtected() {
+		if(password.equals("")) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 
 }

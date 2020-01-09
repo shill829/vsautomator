@@ -253,8 +253,9 @@ public class Automator {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 					try {
-						TaskProcessor.connectToWifi(queueDevList.get(x), "..ZonaYoo..");
-					} catch (IOException | JadbException | InterruptedException e1) {
+						WifiNetwork n=new WifiNetwork("..ZonaYoo..");
+						TaskProcessor.connectToWifi(queueDevList.get(x),n);
+					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -284,8 +285,9 @@ public class Automator {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 					try {
-						TaskProcessor.connectToWifi(queueDevList.get(x), "SMSI_TESTPSK", "pleaseletmein");
-					} catch (IOException | JadbException | InterruptedException e1) {
+						WifiNetwork n=new WifiNetwork("SMSI_TESTPSK","pleaseletmein");
+						TaskProcessor.connectToWifi(queueDevList.get(x),n);
+					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

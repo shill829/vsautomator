@@ -39,10 +39,9 @@ public class WifiManager {
 				String next = fileScan.nextLine();
 				String[] comb = next.split(",", 2); // WARNING: if the wifi network's SSID has a comma in
 				fileAlready = true; // it, this will not work properly.
-				
+
 				if (comb.length == 2) {
 					WifiNetwork n = new WifiNetwork(comb[0], comb[1]);
-					System.out.println(n);
 					nets.add(n);
 				} else if (comb.length == 1) {
 					nets.add(new WifiNetwork(comb[0]));
@@ -50,7 +49,7 @@ public class WifiManager {
 			}
 			fileScan.close();
 			fis.close();
-			
+
 		} catch (IOException e) {
 
 		}
@@ -127,9 +126,9 @@ public class WifiManager {
 						}
 
 						if (!isAlreadySaved) {
-							FileOutputStream fos = new FileOutputStream("netlist.csv",true);
-							PrintWriter pw = new PrintWriter(fos,true);
-							pw.append("\n"+n.ssid + "," + n.password);
+							FileOutputStream fos = new FileOutputStream("netlist.csv", true);
+							PrintWriter pw = new PrintWriter(fos, true);
+							pw.append("\n" + n.ssid + "," + n.password);
 							nets.add(n);
 							pw.close();
 							fos.close();
@@ -142,33 +141,29 @@ public class WifiManager {
 						e.printStackTrace();
 					}
 					try {
-						if(n.password.isEmpty()) {
-							TaskProcessor.connectToWifi(d, n.ssid);
-						}
-						else {
-							TaskProcessor.connectToWifi(d, n.ssid, n.password);
-						}
-					} catch (IOException | JadbException | InterruptedException e) {
+						TaskProcessor.connectToWifi(d, n);
+
+					} catch (IOException | JadbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
 				} else {
 					try {
-						if(selected.password.isEmpty()) {
-							TaskProcessor.connectToWifi(d, selected.ssid);
-						}
-						else {
-							TaskProcessor.connectToWifi(d, selected.ssid, selected.password);
-						}
-					} catch (IOException | JadbException | InterruptedException e) {
+						TaskProcessor.connectToWifi(d, selected);
+					} catch (IOException | JadbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
+				
 				networks.clear();
-			
-				//previousNetworkList.revalidate();
+				if (fileAlready) {
+					for (int x = 0; x < nets.size(); x++) {
+						networks.addElement(nets.get(x).toString());
+					}
+				}
+				 previousNetworkList.revalidate();
 			}
 		});
 		doConnect.setBounds(416, 340, 107, 33);

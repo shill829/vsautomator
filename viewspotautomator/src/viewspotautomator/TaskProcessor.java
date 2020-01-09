@@ -11,7 +11,7 @@ import se.vidstige.jadb.managers.Package;
 import se.vidstige.jadb.managers.PackageManager;
 
 /**
- * This class is responsible for running the tasks selected in Automator.
+ * This class is responsible for running many different tasks on Android devices. It is used by most of the other classes in the package.r.
  * 
  * @author shill
  *
@@ -55,7 +55,7 @@ public class TaskProcessor {
 				combinedData[2] = getVersion(d, "com.smithmicro.viewspot.orange.esp");
 				break;
 			}
-			
+
 		}
 
 		return combinedData;
@@ -165,8 +165,7 @@ public class TaskProcessor {
 		d.getDevice().executeShell("svc wifi disable");
 	}
 
-	public static void connectToWifi(Device d, String ssid, String pw)
-			throws IOException, JadbException, InterruptedException {
+	public static void connectToWifi(Device d, WifiNetwork n) throws IOException, JadbException {
 		d.getDevice().executeShell("svc wifi enable", "");
 		if (!TaskProcessor
 				.convertStreamToString(d.getDevice().executeShell("pm list packages com.steinwurf.adbjoinwifi", ""))
@@ -191,36 +190,12 @@ public class TaskProcessor {
 			}
 		};
 		kill.start();
-		d.getDevice().executeShell("am start -n com.steinwurf.adbjoinwifi/.MainActivity -e ssid " + ssid
-				+ " -e	password_type WPA -e password " + pw, "");
-	}
-
-	public static void connectToWifi(Device d, String ssid) throws IOException, JadbException, InterruptedException {
-		d.getDevice().executeShell("svc wifi enable", "");
-		if (!TaskProcessor
-				.convertStreamToString(d.getDevice().executeShell("pm list packages com.steinwurf.adbjoinwifi", ""))
-				.contains("com.steinwurf.adbjoinwifi")) {
-			File f = new File("adb-join-wifi.apk");
-			TaskProcessor.installApp(d, f);
+		if (!n.isProtected()) {
+			d.getDevice().executeShell("am start -n com.steinwurf.adbjoinwifi/.MainActivity -e ssid " + n.ssid, "");
+		} else {
+			d.getDevice().executeShell("am start -n com.steinwurf.adbjoinwifi/.MainActivity -e ssid " + n.ssid
+					+ " -e	password_type WPA -e password " + n.password, "");
 		}
-		Thread kill = new Thread() {
-			public void run() {
-				try {
-					Thread.sleep(8000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					d.getDevice().executeShell("am force-stop com.steinwurf.adbjoinwifi", "");
-				} catch (IOException | JadbException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
-		kill.start();
-		d.getDevice().executeShell("am start -n com.steinwurf.adbjoinwifi/.MainActivity -e ssid " + ssid, "");
 	}
 
 	public static void refreshLogs(Device d) throws IOException, JadbException, InterruptedException {
@@ -252,7 +227,8 @@ public class TaskProcessor {
 
 	public static String tester(Device d) throws IOException, JadbException {
 
-		String x = TaskProcessor.convertStreamToString(d.getDevice().executeShell("dumpsys battery | grep","temperature:"));
+		String x = TaskProcessor
+				.convertStreamToString(d.getDevice().executeShell("dumpsys battery | grep", "temperature:"));
 
 		return x;
 	}
