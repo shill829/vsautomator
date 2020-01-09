@@ -49,7 +49,13 @@ public class TaskProcessor {
 				combinedData[1] = "com.smithmicro.viewspot";
 				combinedData[2] = getVersion(d, "com.smithmicro.viewspot");
 				break;
+			} else if (installedApps.get(x).toString().contains("com.smithmicro.viewspot.orange.esp")) {
+				combinedData[0] = "Orange";
+				combinedData[1] = "com.smithmicro.viewspot.orange.esp";
+				combinedData[2] = getVersion(d, "com.smithmicro.viewspot.orange.esp");
+				break;
 			}
+			
 		}
 
 		return combinedData;

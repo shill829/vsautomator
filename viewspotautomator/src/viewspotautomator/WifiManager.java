@@ -1,6 +1,5 @@
 package viewspotautomator;
 
-import java.awt.FileDialog;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,18 +8,14 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import se.vidstige.jadb.JadbException;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -75,6 +70,7 @@ public class WifiManager {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		JList previousNetworkList = new JList(networks);
 		netScrollPane.setViewportView(previousNetworkList);
 		previousNetworkList.addListSelectionListener(new ListSelectionListener() {
