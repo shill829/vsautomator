@@ -161,6 +161,20 @@ public class PackageListManager {
 		});
 		btnSelectViewspot.setBounds(339, 361, 126, 23);
 		packManager.getContentPane().add(btnSelectViewspot);
+		
+		JButton btnClearData = new JButton("Clear Data");
+		btnClearData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					TaskProcessor.clearDataApp(d, selected);
+				} catch (IOException | JadbException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}				
+			}
+		});
+		btnClearData.setBounds(339, 334, 126, 23);
+		packManager.getContentPane().add(btnClearData);
 
 		packManager.setVisible(true);
 

@@ -100,6 +100,11 @@ public class TaskProcessor {
 		d.getDevice().executeShell("am force-stop " + p, "");
 	}
 
+	public static void clearDataApp(Device d, Package p) throws IOException, JadbException {
+
+		d.getDevice().executeShell("pm clear " + p, "");
+	}
+
 	public static void launchApp(Device d, Package p) throws IOException, JadbException {
 		d.getDevice().executeShell("monkey -p " + p + " -c android.intent.category.LAUNCHER 1", "");
 	}
