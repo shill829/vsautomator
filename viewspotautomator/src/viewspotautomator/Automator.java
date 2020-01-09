@@ -448,6 +448,48 @@ public class Automator {
 		doPackMan.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doPackMan.setBounds(140, 401, 106, 23);
 		primary.getContentPane().add(doPackMan);
+		
+		JButton doInstalFancy = new JButton("Fancy Test APK");
+		doInstalFancy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				File f = new File("fancy.apk");
+				for (int x = 0; x < queueDevList.size(); x++) {
+					try {
+						TaskProcessor.installApp(queueDevList.get(x), f);
+					} catch (IOException | JadbException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				connDevs.clear();
+				try {
+					updateDevices();
+				} catch (IOException | JadbException | InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				for (int x = 0; x < devices.size(); x++) {
+					connDevs.addElement(devices.get(x).toString());
+				}
+				connectedDevices.revalidate();
+				queueDevList.clear();
+				queueDevs.clear();
+				queuedDevices.revalidate();
+			}
+		});
+		doInstalFancy.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		doInstalFancy.setBounds(535, 496, 89, 23);
+		primary.getContentPane().add(doInstalFancy);
+		
+		JButton btnNetworkManager = new JButton("Network Manager");
+		btnNetworkManager.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new WifiManager(selected);
+			}
+		});
+		btnNetworkManager.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		btnNetworkManager.setBounds(140, 434, 106, 23);
+		primary.getContentPane().add(btnNetworkManager);
 
 		primary.setVisible(true);// should be at end of method
 	}
@@ -472,7 +514,7 @@ public class Automator {
 		 * System.out.println(devs.get(x)); System.out.println(); }
 		 * 
 		 */
-
+		System.out.println(TaskProcessor.tester(devices.get(0)));
 	}
 
 	@PostConstruct

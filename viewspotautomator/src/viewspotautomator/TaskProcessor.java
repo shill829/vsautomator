@@ -232,7 +232,7 @@ public class TaskProcessor {
 		String rawString = convertStreamToString(d.getDevice().execute("dumpsys battery | grep", "powered:"));
 		String result = "error";
 		if (rawString.contains("AC powered: true")) {
-			result = "AC_Charging";
+			result = "USB_Charging";
 		} else if (rawString.contains("USB powered: true")) {
 			result = "USB_Charging";
 		} else if (rawString.contains("Wireless powered: true")) {
@@ -246,12 +246,7 @@ public class TaskProcessor {
 
 	public static String tester(Device d) throws IOException, JadbException {
 
-		String command = ("cat /proc/uptime |cut -c1-9 |tr -d .");
-		String[] cmdArray = command.split(" ");
-		for (int i = 0; i < cmdArray.length; i++) {
-
-		}
-		String x = TaskProcessor.convertStreamToString(d.getDevice().executeShell(command));
+		String x = TaskProcessor.convertStreamToString(d.getDevice().executeShell("dumpsys battery | grep","temperature:"));
 
 		return x;
 	}

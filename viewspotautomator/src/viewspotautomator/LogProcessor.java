@@ -85,11 +85,22 @@ public class LogProcessor {
 		ArrayList<String> names = combined.get(0);
 		ArrayList<String> values = combined.get(1);
 		ArrayList<String> commands = new ArrayList<String>();
+		ArrayList<String> arguments=new ArrayList<String>();
 		ArrayList<String> results = new ArrayList<String>();
 		results.add("Analytics Testing for: " + d);
 		Scanner fileScan = new Scanner(testCases);
 		while (fileScan.hasNext()) {
-			commands.add(fileScan.nextLine());
+			String str=fileScan.nextLine();
+			String[]comb=str.split(",",2);
+			commands.add(comb[0]);
+			if(comb.length>1) {
+				System.out.println(comb[1]);
+				arguments.add(comb[1]);
+			}
+			else {
+				arguments.add("");
+			}
+			
 		}
 		fileScan.close();
 		int numValues = commands.size();
@@ -97,7 +108,7 @@ public class LogProcessor {
 		for (int x = 0; x < commands.size(); x++) {
 			String match = "Fail";
 			String expected = "";
-			if (!commands.get(x).contains("man")) { // Special case tests
+			if ((!commands.get(x).contains("manualtest"))&&!commands.get(x).contains("nullValue")) { // Special case tests
 				if (commands.get(x).contains("getVersion")) {
 					System.out.println(d.getVersion().trim());
 					if (values.get(x).trim().contains(d.getVersion().trim())) {
@@ -132,9 +143,9 @@ public class LogProcessor {
 					numCorrect++;
 				} else {
 					String result = TaskProcessor
-							.convertStreamToString(d.getDevice().executeShell(commands.get(x), ""));
+							.convertStreamToString(d.getDevice().executeShell(commands.get(x),arguments.get(x)));
 
-					if (result.contains(values.get(x))) {
+					if (result.contains(values.get(x))||values.get(x).contains(result)) {
 						match = "Pass";
 						numCorrect++;
 					} else {
@@ -144,11 +155,17 @@ public class LogProcessor {
 
 				}
 
-			} else if (commands.get(x).contains("man")) {
+			} else if (commands.get(x).contains("manualtest")) {
 				match = "Manual";
 				numCorrect++;
 			}
-			String test = ("Test " + (x) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
+			else if (commands.get(x).contains("nullValue")) {
+				if(values.get(x).contains("(null)")){
+					match="Pass";
+					numCorrect++;
+				}				
+			}
+			String test = ("Test " + (x+1) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
 			results.add(test);
 		}
 		results.add("Testing complete: " + numCorrect + " out of " + numValues + " correct.");
