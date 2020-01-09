@@ -142,7 +142,12 @@ public class WifiManager {
 						e.printStackTrace();
 					}
 					try {
-						TaskProcessor.connectToWifi(d, n.ssid, n.password);
+						if(n.password.isEmpty()) {
+							TaskProcessor.connectToWifi(d, n.ssid);
+						}
+						else {
+							TaskProcessor.connectToWifi(d, n.ssid, n.password);
+						}
 					} catch (IOException | JadbException | InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -150,7 +155,12 @@ public class WifiManager {
 
 				} else {
 					try {
-						TaskProcessor.connectToWifi(d, selected.ssid, selected.password);
+						if(selected.password.isEmpty()) {
+							TaskProcessor.connectToWifi(d, selected.ssid);
+						}
+						else {
+							TaskProcessor.connectToWifi(d, selected.ssid, selected.password);
+						}
 					} catch (IOException | JadbException | InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -15,16 +15,8 @@ public class WifiNetwork {
 	}
 	
 	public String toString() {
-		String passStat;
-		if(password=="") {
-			passStat="unprotected";
-		}
-		else {
-			passStat="protected";
-		}
-		
-		
-		return (ssid+": "+passStat);
+	
+		return (ssid);
 		
 	}
 	
