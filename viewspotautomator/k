@@ -1,6 +1,0 @@
-notes
-
-for isCharging
-dumpsys battery |grep powered:|grep -o '....$'
-for serial
-getprop | grep ro.boot.serialno
