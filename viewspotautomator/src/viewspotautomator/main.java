@@ -50,7 +50,6 @@ public class main {
 	 */
 	public static void errorThrow(String s) {
 		JFrame error = new JFrame("ViewSpot Automator error");// Setup window
-		error.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		error.setSize(390, 308);
 		error.getContentPane().setLayout(null);
 		
