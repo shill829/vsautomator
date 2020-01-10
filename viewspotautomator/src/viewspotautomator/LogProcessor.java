@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.swing.JFrame;
@@ -20,35 +21,77 @@ import java.awt.GridBagConstraints;
 
 public class LogProcessor {
 
-	public static String getCurrLogs(Device d) throws IOException, JadbException { // returns most recent logs from
-																					// server as string
-		try {
-			TaskProcessor.refreshLogs(d);
-		} catch (IOException | JadbException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String[] command = { "curl", "-silent", "-XGET", "https://apollo-logrx.smithmicro.io/_qs/1", "|", "tail", "-n",
-				"1" };
-		ProcessBuilder processBuilder = new ProcessBuilder(command);
-		processBuilder.directory(new File("/"));
-		Process getLogs = processBuilder.start();
-		InputStream webLogInput = getLogs.getInputStream();
-		String input = TaskProcessor.convertStreamToString(webLogInput);
-		String[] inputParts = input.split("charset=utf-8", 2);
-		@SuppressWarnings("resource")
-		Scanner logScan = new Scanner(inputParts[1].trim()).useDelimiter("LOG,");
+	public static String getCurrLogs(Device d, int logSource) throws IOException, JadbException { // returns most recent
 		ArrayList<String> entries = new ArrayList<String>();
-		String deviceName = TaskProcessor.getDeviceModel(d.getDevice()).trim();
-		while (logScan.hasNext()) {
-			String testVal = logScan.next();
-			if (testVal.contains(deviceName)) {
-				entries.add(testVal);
+		// logs from
+
+	
+		
+		if (logSource == 0) {
+			try {
+				TaskProcessor.refreshLogs(d);
+			} catch (IOException | JadbException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
-		logScan.close();
-		getLogs.destroy();
-		webLogInput.close();
+			String[] command = { "curl", "-silent", "-XGET", "https://apollo-logrx.smithmicro.io/_qs/1", "|", "tail",
+					"-n", "1" };
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
+			processBuilder.directory(new File("/"));
+			Process getLogs = processBuilder.start();
+			InputStream webLogInput = getLogs.getInputStream();
+			String input = TaskProcessor.convertStreamToString(webLogInput);
+			String[] inputParts = input.split("charset=utf-8", 2);
+			@SuppressWarnings("resource")
+			Scanner logScan = new Scanner(inputParts[1].trim()).useDelimiter("LOG,");
+			String deviceName = TaskProcessor.getDeviceModel(d.getDevice()).trim();
+			while (logScan.hasNext()) {
+				String testVal = logScan.next();
+				if (testVal.contains(deviceName)) {
+					entries.add(testVal);
+				}
+			}
+			logScan.close();
+			getLogs.destroy();
+			webLogInput.close();
+		} else if (logSource == 1) {
+			
+			
+			String[] command = {"adb","-s",d.getDevice().getSerial(),"logcat","-v","threadtime","|","find","\"cm_Logger\""};
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
+			processBuilder.directory(new File("/"));
+			Process getLogs = processBuilder.start();
+			Thread kill=new Thread() {
+				public void run(){
+					try {
+						TaskProcessor.refreshLogs(d);
+						Thread.sleep(5000);
+					} catch (InterruptedException | IOException | JadbException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					getLogs.destroy();
+				}
+			};
+			kill.start();
+			InputStream localLogInput = getLogs.getInputStream();
+			String input = TaskProcessor.convertStreamToString(localLogInput);
+			//System.out.println(input);
+			String deviceName = TaskProcessor.getDeviceModel(d.getDevice()).trim();
+			@SuppressWarnings("resource")
+			Scanner logScan2 = new Scanner(input).useDelimiter(Pattern.quote("persist: map = {"));
+			int x=0;
+			while ((logScan2.hasNext())&&(x<3)) {
+				String testVal = logScan2.next();
+				if (testVal.contains(deviceName)) {
+					entries.add(testVal);				
+					x++;
+				}
+				
+			}
+			logScan2.close();
+			
+		}		
 		return entries.get(entries.size() - 1);
 	}
 
@@ -78,29 +121,28 @@ public class LogProcessor {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public static ArrayList<String> logTester(Device d) throws IOException, JadbException {
+	public static ArrayList<String> logTester(Device d, int logSource) throws IOException, JadbException {
 
 		File testCases = new File("logtester.csv");
-		ArrayList<ArrayList<String>> combined = parseDevLogs(getCurrLogs(d));
+		ArrayList<ArrayList<String>> combined = parseDevLogs(getCurrLogs(d, logSource));
 		ArrayList<String> names = combined.get(0);
 		ArrayList<String> values = combined.get(1);
 		ArrayList<String> commands = new ArrayList<String>();
-		ArrayList<String> arguments=new ArrayList<String>();
+		ArrayList<String> arguments = new ArrayList<String>();
 		ArrayList<String> results = new ArrayList<String>();
 		results.add("Analytics Testing for: " + d);
 		Scanner fileScan = new Scanner(testCases);
 		while (fileScan.hasNext()) {
-			String str=fileScan.nextLine();
-			String[]comb=str.split(",",2);
+			String str = fileScan.nextLine();
+			String[] comb = str.split(",", 2);
 			commands.add(comb[0]);
-			if(comb.length>1) {
-				System.out.println(comb[1]);
+			if (comb.length > 1) {
+		
 				arguments.add(comb[1]);
-			}
-			else {
+			} else {
 				arguments.add("");
 			}
-			
+
 		}
 		fileScan.close();
 		int numValues = commands.size();
@@ -108,7 +150,8 @@ public class LogProcessor {
 		for (int x = 0; x < commands.size(); x++) {
 			String match = "Fail";
 			String expected = "";
-			if ((!commands.get(x).contains("manualtest"))&&!commands.get(x).contains("nullValue")) { // Special case tests
+			if ((!commands.get(x).contains("manualtest")) && !commands.get(x).contains("nullValue")) { // Special case
+																										// tests
 				if (commands.get(x).contains("getVersion")) {
 					System.out.println(d.getVersion().trim());
 					if (values.get(x).trim().contains(d.getVersion().trim())) {
@@ -143,9 +186,9 @@ public class LogProcessor {
 					numCorrect++;
 				} else {
 					String result = TaskProcessor
-							.convertStreamToString(d.getDevice().executeShell(commands.get(x),arguments.get(x)));
+							.convertStreamToString(d.getDevice().executeShell(commands.get(x), arguments.get(x)));
 
-					if (result.contains(values.get(x))||values.get(x).contains(result)) {
+					if (result.contains(values.get(x)) || values.get(x).contains(result)) {
 						match = "Pass";
 						numCorrect++;
 					} else {
@@ -158,14 +201,13 @@ public class LogProcessor {
 			} else if (commands.get(x).contains("manualtest")) {
 				match = "Manual";
 				numCorrect++;
-			}
-			else if (commands.get(x).contains("nullValue")) {
-				if(values.get(x).contains("(null)")){
-					match="Pass";
+			} else if (commands.get(x).contains("nullValue")) {
+				if (values.get(x).contains("(null)")) {
+					match = "Pass";
 					numCorrect++;
-				}				
+				}
 			}
-			String test = ("Test " + (x+1) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
+			String test = ("Test " + (x + 1) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
 			results.add(test);
 		}
 		results.add("Testing complete: " + numCorrect + " out of " + numValues + " correct.");

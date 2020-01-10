@@ -15,7 +15,7 @@ public class FileSelector {
 		fileSelector.getContentPane().setLayout(null);
 		FileDialog fd = new FileDialog(fileSelector, "Choose an APK", FileDialog.LOAD);
 		fileSelector.setVisible(true);
-		fd.setDirectory("C:\\");
+		fd.setDirectory("/");
 		fd.setFile("*.apk");
 		fd.setVisible(true);
 		File filename = new File(fd.getDirectory() + fd.getFile());
@@ -30,7 +30,7 @@ public class FileSelector {
 		fileSelector.getContentPane().setLayout(null);
 		FileDialog fd = new FileDialog(fileSelector, "Choose an APK", FileDialog.LOAD);
 		fileSelector.setVisible(true);// should be at end of method
-		fd.setDirectory("C:\\");
+		fd.setDirectory("/");
 		fd.setFile("*" + fileType);
 		fd.setVisible(true);
 		File filename = new File(fd.getDirectory() + fd.getFile());

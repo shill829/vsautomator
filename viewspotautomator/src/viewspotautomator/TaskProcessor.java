@@ -202,7 +202,7 @@ public class TaskProcessor {
 		d.getDevice().executeShell("am start -n " + d.getPackName() + "/com.customermobile.demo.MainTab", "");
 		d.getDevice().executeShell("input tap 400 400", "");
 		d.getDevice().executeShell("input keyevent KEYCODE_HOME", "");
-		d.getDevice().executeShell("am start -n " + d.getPackName() + "/com.customermobile.demo.MainTab", "");
+		d.getDevice().executeShell("monkey -p "+d.getPackName()+" -c android.intent.category.LAUNCHER 1", "");
 	}
 
 	public static void rebootDevice(Device d) throws IOException, JadbException {

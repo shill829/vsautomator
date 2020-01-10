@@ -369,13 +369,13 @@ public class Automator {
 		doRefreshDevs.setBounds(25, 401, 89, 23);
 		primary.getContentPane().add(doRefreshDevs);
 
-		JButton doLoggerTest = new JButton("Log Test");
+		JButton doLoggerTest = new JButton("Web Log Test");
 		doLoggerTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 
 					try {
-						LogProcessor.logTester(queueDevList.get(x));
+						LogProcessor.logTester(queueDevList.get(x),0);
 					} catch (IOException | JadbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -492,6 +492,40 @@ public class Automator {
 		btnNetworkManager.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNetworkManager.setBounds(140, 434, 106, 23);
 		primary.getContentPane().add(btnNetworkManager);
+		
+		JButton btnLocalLogTest = new JButton("Local Log Test");
+		btnLocalLogTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int x = 0; x < queueDevList.size(); x++) {
+
+					try {
+						LogProcessor.logTester(queueDevList.get(x),1);
+					} catch (IOException | JadbException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				connDevs.clear();
+				try {
+					updateDevices();
+				} catch (IOException | JadbException | InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				for (int x = 0; x < devices.size(); x++) {
+					connDevs.addElement(devices.get(x).toString());
+				}
+				connectedDevices.revalidate();
+				queueDevList.clear();
+				queueDevs.clear();
+				queuedDevices.revalidate();
+				
+			}
+		});
+		btnLocalLogTest.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		btnLocalLogTest.setBounds(310, 473, 89, 23);
+		primary.getContentPane().add(btnLocalLogTest);
 
 		primary.setVisible(true);// should be at end of method
 	}

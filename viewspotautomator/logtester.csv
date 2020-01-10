@@ -1,58 +1,58 @@
-getprop ro.product.model
-manualtest
-getVersion
-getPackName
+getprop ro.product.model,
+manualtest,
+getVersion,
+getPackName,
 dumpsys battery | grep,level:
 dumpsys battery | grep,temperature:
-getprop ro.product.board
-getprop ro.boot.bootloader
-getprop ro.build.id
-getprop ro.product.brand
-manualtest
-manualtest
-getChargeType
-manualtest
-getSettingsBlocker
-getConnection
-getCustomer
-getprop ro.product.cpu.abi
-getprop ro.product.cpu2.abi
-getDataState
-getprop ro.product.device
-service call iphonesubinfo 1 | awk -F "'" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=
-getprop ro.build.display.id
-getprop ro.build.fingerprint
-getprop ro.build.version.release
-getprop ro.vendor.build.version.incremental
-getprop ro.build.version.sdk
-getprop ro.hardware
-getprop ro.build.host
+getprop ro.product.board,
+getprop ro.boot.bootloader,
+getprop ro.build.id,
+getprop ro.product.brand,
+manualtest,
+manualtest,
+getChargeType,
+manualtest,
+getSettingsBlocker,
+getConnection,
+getCustomer,
+getprop ro.product.cpu.abi,
+getprop ro.product.cpu2.abi,
+getDataState,
+getprop ro.product.device,
+"service call iphonesubinfo 1 | awk -F ""'"" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=",
+getprop ro.build.display.id,
+getprop ro.build.fingerprint,
+getprop ro.build.version.release,
+getprop ro.vendor.build.version.incremental,
+getprop ro.build.version.sdk,
+getprop ro.hardware,
+getprop ro.build.host,
 dumpsys battery | grep -m 1,'powered: true'
 dumpsys battery | grep -m 1,'powered: true'
-nullValue
-manualtest
-dumpsys location | grep -E -o "horizontalAccuracyMeters:.{0,8}" '
+nullValue,
+manualtest,
+"dumpsys location | grep -E -o ""horizontalAccuracyMeters:.{0","8}"" '"
 dumpsys location | grep -E -o,"LatitudeDegrees:.{0,6}"
-dumpsys location | grep -E -o,"LongitudeDegrees:.{0,6}" 
-manualtest
-getprop ro.product.manufacturer
-manualtest
-manualtest
-manualtest
-manualtest
-manualtest
-manualtest
-manualtest
-getprop ro.product.name
-echo $(($(settings get system screen_off_timeout)/1000))
-manualtest
-manualtest
-nullValue
-manualtest
-nullValue
-manualtest
-manualtest
-manualtest
-manualtest
-cat /proc/uptime |cut -c1-9 |tr -d .
-getprop ro.build.user
+dumpsys location | grep -E -o,"LongitudeDegrees:.{0,6} "
+manualtest,
+getprop ro.product.manufacturer,
+manualtest,
+manualtest,
+manualtest,
+manualtest,
+manualtest,
+manualtest,
+manualtest,
+getprop ro.product.name,
+echo $(($(settings get system screen_off_timeout)/1000)),
+manualtest,
+manualtest,
+nullValue,
+manualtest,
+nullValue,
+manualtest,
+manualtest,
+manualtest,
+manualtest,
+cat /proc/uptime |cut -c1-9 |tr -d .,
+getprop ro.build.user,
