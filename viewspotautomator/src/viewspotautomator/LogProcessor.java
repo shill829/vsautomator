@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
 import javax.annotation.PostConstruct;
 import javax.swing.JFrame;
-
 import se.vidstige.jadb.*;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -202,7 +200,7 @@ public class LogProcessor {
 				match = "Manual";
 				numCorrect++;
 			} else if (commands.get(x).contains("nullValue")) {
-				if (values.get(x).contains("(null)")) {
+				if (values.get(x).contains("null")) {
 					match = "Pass";
 					numCorrect++;
 				}

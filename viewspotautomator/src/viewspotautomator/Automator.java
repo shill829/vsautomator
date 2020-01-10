@@ -27,7 +27,7 @@ public class Automator {
 	private int toRem = 0;
 	private List<Boolean> tasks = new ArrayList<Boolean>();// list of tasks to send off to TaskProcessor class
 
-	public Automator() throws IOException, JadbException, InterruptedException {
+	public Automator() throws IOException, JadbException, InterruptedException, NoDevicesException {
 
 		for (int x = 0; x < 5; x++) { // setup Tasks arraylist, will have to increase x if want more than 5 tasks.
 			// Stupid way of doing it but I'll change it when i come up with something
@@ -48,6 +48,8 @@ public class Automator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (JadbException e1) {
+			e1.printStackTrace();
+
 		}
 
 		DefaultListModel<String> connDevs = new DefaultListModel<String>(); // Collect devices for list model
@@ -155,7 +157,7 @@ public class Automator {
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -180,18 +182,18 @@ public class Automator {
 						TaskProcessor.disableSettingsBlocker(queueDevList.get(x));
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					} catch (JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -214,7 +216,7 @@ public class Automator {
 						TaskProcessor.enableWifi(queueDevList.get(x));
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				queueDevList.clear();
@@ -235,7 +237,7 @@ public class Automator {
 						TaskProcessor.disableWifi(queueDevList.get(x));
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				queueDevList.clear();
@@ -253,19 +255,19 @@ public class Automator {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 					try {
-						WifiNetwork n=new WifiNetwork("..ZonaYoo..");
-						TaskProcessor.connectToWifi(queueDevList.get(x),n);
+						WifiNetwork n = new WifiNetwork("..ZonaYoo..");
+						TaskProcessor.connectToWifi(queueDevList.get(x), n);
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -285,19 +287,19 @@ public class Automator {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 					try {
-						WifiNetwork n=new WifiNetwork("SMSI_TESTPSK","pleaseletmein");
-						TaskProcessor.connectToWifi(queueDevList.get(x),n);
+						WifiNetwork n = new WifiNetwork("SMSI_TESTPSK", "pleaseletmein");
+						TaskProcessor.connectToWifi(queueDevList.get(x), n);
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -321,15 +323,15 @@ public class Automator {
 						TaskProcessor.rebootDevice(queueDevList.get(x));
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -352,9 +354,9 @@ public class Automator {
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -375,7 +377,7 @@ public class Automator {
 				for (int x = 0; x < queueDevList.size(); x++) {
 
 					try {
-						LogProcessor.logTester(queueDevList.get(x),0);
+						LogProcessor.logTester(queueDevList.get(x), 0);
 					} catch (IOException | JadbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -385,9 +387,9 @@ public class Automator {
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -411,15 +413,15 @@ public class Automator {
 						TaskProcessor.installApp(queueDevList.get(x), f);
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -443,14 +445,14 @@ public class Automator {
 					new PackageListManager(selected);
 				} catch (IOException | JadbException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 			}
 		});
 		doPackMan.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doPackMan.setBounds(140, 401, 106, 23);
 		primary.getContentPane().add(doPackMan);
-		
+
 		JButton doInstalFancy = new JButton("Fancy Test APK");
 		doInstalFancy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -460,15 +462,15 @@ public class Automator {
 						TaskProcessor.installApp(queueDevList.get(x), f);
 					} catch (IOException | JadbException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						main.errorThrow(e1.toString());
 					}
 				}
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -482,7 +484,7 @@ public class Automator {
 		doInstalFancy.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		doInstalFancy.setBounds(535, 496, 89, 23);
 		primary.getContentPane().add(doInstalFancy);
-		
+
 		JButton btnNetworkManager = new JButton("Network Manager");
 		btnNetworkManager.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -492,14 +494,14 @@ public class Automator {
 		btnNetworkManager.setFont(new Font("Tahoma", Font.PLAIN, 8));
 		btnNetworkManager.setBounds(140, 434, 106, 23);
 		primary.getContentPane().add(btnNetworkManager);
-		
+
 		JButton btnLocalLogTest = new JButton("Local Log Test");
 		btnLocalLogTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for (int x = 0; x < queueDevList.size(); x++) {
 
 					try {
-						LogProcessor.logTester(queueDevList.get(x),1);
+						LogProcessor.logTester(queueDevList.get(x), 1);
 					} catch (IOException | JadbException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -509,9 +511,9 @@ public class Automator {
 				connDevs.clear();
 				try {
 					updateDevices();
-				} catch (IOException | JadbException | InterruptedException e1) {
+				} catch (IOException | JadbException | InterruptedException | NoDevicesException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					main.errorThrow(e1.toString());
 				}
 				for (int x = 0; x < devices.size(); x++) {
 					connDevs.addElement(devices.get(x).toString());
@@ -520,17 +522,21 @@ public class Automator {
 				queueDevList.clear();
 				queueDevs.clear();
 				queuedDevices.revalidate();
-				
+
 			}
 		});
 		btnLocalLogTest.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		btnLocalLogTest.setBounds(310, 473, 89, 23);
+		btnLocalLogTest.setBounds(314, 474, 89, 23);
 		primary.getContentPane().add(btnLocalLogTest);
 
 		primary.setVisible(true);// should be at end of method
 	}
 
-	public void updateDevices() throws IOException, JadbException, InterruptedException { // scans for devices and adds
+	public void updateDevices() throws IOException, JadbException, InterruptedException, NoDevicesException { // scans
+																												// for
+																												// devices
+																												// and
+																												// adds
 		// to list
 		// AdbServerLauncher launch=new AdbServerLauncher("C:\","adb");
 		devices.clear();
@@ -550,7 +556,9 @@ public class Automator {
 		 * System.out.println(devs.get(x)); System.out.println(); }
 		 * 
 		 */
-		System.out.println(TaskProcessor.tester(devices.get(0)));
+		if (devices.size() < 1) {
+			throw new NoDevicesException("Error: No Devices found");
+		}
 	}
 
 	@PostConstruct
