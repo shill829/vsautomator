@@ -542,6 +542,7 @@ public class Automator {
 		devices.clear();
 		JadbConnection scanDevices = new JadbConnection();
 		List<JadbDevice> toConvert = scanDevices.getDevices();
+		
 		for (int x = 0; x < toConvert.size(); x++) {
 			devices.add(new Device(toConvert.get(x)));
 			devices.get(x).getDevice().executeShell("settings put system screen_off_timeout 15000", "");

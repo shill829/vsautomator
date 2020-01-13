@@ -145,10 +145,12 @@ public class LogProcessor {
 		fileScan.close();
 		int numValues = commands.size();
 		int numCorrect = 0;
+		int numWrong=0;
+		int numUntested=0;
 		for (int x = 0; x < commands.size(); x++) {
 			String match = "Fail";
 			String expected = "";
-			if ((!commands.get(x).contains("manualtest")) && !commands.get(x).contains("nullValue")) { // Special case
+			if ((!commands.get(x).contains("manualtest")) && !commands.get(x).contains("nullValue")&&!commands.get(x).contains("static")) { // Special case
 																										// tests
 				if (commands.get(x).contains("getVersion")) {
 					System.out.println(d.getVersion().trim());
@@ -175,13 +177,10 @@ public class LogProcessor {
 
 				} else if (commands.get(x).contains("getConnection")) {
 					match = "N/A";
-					numCorrect++;
-				} else if (commands.get(x).contains("getCustomer")) {
-					match = "N/A";
-					numCorrect++;
+					numUntested++;				
 				} else if (commands.get(x).contains("getDataState")) {
 					match = "N/A";
-					numCorrect++;
+					numUntested++;
 				} else {
 					String result = TaskProcessor
 							.convertStreamToString(d.getDevice().executeShell(commands.get(x), arguments.get(x)));
@@ -198,17 +197,29 @@ public class LogProcessor {
 
 			} else if (commands.get(x).contains("manualtest")) {
 				match = "Manual";
-				numCorrect++;
+				numUntested++;
+				expected=(" | Got: "+values.get(x));
 			} else if (commands.get(x).contains("nullValue")) {
 				if (values.get(x).contains("null")) {
 					match = "Pass";
 					numCorrect++;
 				}
+			}else if (commands.get(x).contains("static")) {
+				if(arguments.get(x).contains(values.get(x))) {
+					numCorrect++;
+					match="Pass"; 
+				}else {				
+					expected = (" | Expected: " + arguments.get(x) + "  Got: " + values.get(x));
+				}
 			}
+		
+			numWrong=numValues-numCorrect-numUntested;
 			String test = ("Test " + (x + 1) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
 			results.add(test);
 		}
 		results.add("Testing complete: " + numCorrect + " out of " + numValues + " correct.");
+		results.add(numWrong+" out of "+numValues+" failed.");
+		results.add(numUntested+" out of "+numValues+" untested.");
 		JFrame logTester = new JFrame("ViewSpot Automator- Log Testing " + d.getDevice());// Setup window
 		logTester.setSize(763, 567);
 		GridBagLayout gridBagLayout = new GridBagLayout();
