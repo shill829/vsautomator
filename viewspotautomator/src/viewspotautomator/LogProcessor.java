@@ -16,15 +16,24 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-
+/**
+ * This class is responsible for parsing and validating persist logs
+ * @author shill
+ *
+ */
 public class LogProcessor {
-
+/**
+ * 
+ * @param d The device to get logs from
+ * @param logSource 0- get logs from online 1- get logs from device
+ * @return Returns most recent persist log matching device as a String
+ * @throws IOException
+ * @throws JadbException
+ */
 	public static String getCurrLogs(Device d, int logSource) throws IOException, JadbException { // returns most recent
 		ArrayList<String> entries = new ArrayList<String>();
 		// logs from
 
-	
-		
 		if (logSource == 0) {
 			try {
 				TaskProcessor.refreshLogs(d);
@@ -53,14 +62,14 @@ public class LogProcessor {
 			getLogs.destroy();
 			webLogInput.close();
 		} else if (logSource == 1) {
-			
-			
-			String[] command = {"adb","-s",d.getDevice().getSerial(),"logcat","-v","threadtime","|","find","\"cm_Logger\""};
+
+			String[] command = { "adb", "-s", d.getDevice().getSerial(), "logcat", "-v", "threadtime", "|", "find",
+					"\"cm_Logger\"" };
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			processBuilder.directory(new File("/"));
 			Process getLogs = processBuilder.start();
-			Thread kill=new Thread() {
-				public void run(){
+			Thread kill = new Thread() {
+				public void run() {
 					try {
 						TaskProcessor.refreshLogs(d);
 						Thread.sleep(5000);
@@ -74,25 +83,29 @@ public class LogProcessor {
 			kill.start();
 			InputStream localLogInput = getLogs.getInputStream();
 			String input = TaskProcessor.convertStreamToString(localLogInput);
-			//System.out.println(input);
+			// System.out.println(input);
 			String deviceName = TaskProcessor.getDeviceModel(d.getDevice()).trim();
 			@SuppressWarnings("resource")
 			Scanner logScan2 = new Scanner(input).useDelimiter(Pattern.quote("persist: map = {"));
-			int x=0;
-			while ((logScan2.hasNext())&&(x<3)) {
+			int x = 0;
+			while ((logScan2.hasNext()) && (x < 3)) {
 				String testVal = logScan2.next();
 				if (testVal.contains(deviceName)) {
-					entries.add(testVal);				
+					entries.add(testVal);
 					x++;
 				}
-				
+
 			}
 			logScan2.close();
-			
-		}		
+
+		}
 		return entries.get(entries.size() - 1);
 	}
-
+/**
+ * 
+ * @param String persist log from getCurrLogs
+ * @return An Arraylist of two String Arraylists; The first ArrayList is the names of the values, the second is the values themselves.
+ */
 	public static ArrayList<ArrayList<String>> parseDevLogs(String s) { // Splits log string into names list and values
 																		// list
 		@SuppressWarnings("resource")
@@ -119,6 +132,14 @@ public class LogProcessor {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	/**
+	 * 
+	 * @param d Device to test logs on
+	 * @param logSource 0- get logs from online 1- get logs from device
+	 * @return Returns ArrayList of results- also puts them in dialog box, so using the returned Arraylist is not mandatory. 
+	 * @throws IOException
+	 * @throws JadbException
+	 */
 	public static ArrayList<String> logTester(Device d, int logSource) throws IOException, JadbException {
 
 		File testCases = new File("logtester.csv");
@@ -135,7 +156,7 @@ public class LogProcessor {
 			String[] comb = str.split(",", 2);
 			commands.add(comb[0]);
 			if (comb.length > 1) {
-		
+
 				arguments.add(comb[1]);
 			} else {
 				arguments.add("");
@@ -145,13 +166,14 @@ public class LogProcessor {
 		fileScan.close();
 		int numValues = commands.size();
 		int numCorrect = 0;
-		int numWrong=0;
-		int numUntested=0;
+		int numWrong = 0;
+		int numUntested = 0;
 		for (int x = 0; x < commands.size(); x++) {
 			String match = "Fail";
 			String expected = "";
-			if ((!commands.get(x).contains("manualtest")) && !commands.get(x).contains("nullValue")&&!commands.get(x).contains("static")) { // Special case
-																										// tests
+			if ((!commands.get(x).contains("manualtest")) && !commands.get(x).contains("nullValue")
+					&& !commands.get(x).contains("static")) { // Special case
+				// tests
 				if (commands.get(x).contains("getVersion")) {
 					System.out.println(d.getVersion().trim());
 					if (values.get(x).trim().contains(d.getVersion().trim())) {
@@ -163,7 +185,17 @@ public class LogProcessor {
 						match = "Pass";
 						numCorrect++;
 					}
-				} else if (commands.get(x).contains("getChargeType")) {
+
+				} else if (commands.get(x).contains("getBattLevel")) {
+					System.out.println(TaskProcessor.getBatteryLevel(d));
+					if ((values.get(x).contains(TaskProcessor.getBatteryLevel(d))||TaskProcessor.getBatteryLevel(d).contains(values.get(x)))) {
+						match = "Pass";
+						numCorrect++;
+					}
+
+				}
+
+				else if (commands.get(x).contains("getChargeType")) {
 					if (values.get(x).contains(TaskProcessor.getChargeType(d))) {
 						match = "Pass";
 						numCorrect++;
@@ -177,7 +209,7 @@ public class LogProcessor {
 
 				} else if (commands.get(x).contains("getConnection")) {
 					match = "N/A";
-					numUntested++;				
+					numUntested++;
 				} else if (commands.get(x).contains("getDataState")) {
 					match = "N/A";
 					numUntested++;
@@ -198,28 +230,28 @@ public class LogProcessor {
 			} else if (commands.get(x).contains("manualtest")) {
 				match = "Manual";
 				numUntested++;
-				expected=(" | Got: "+values.get(x));
+				expected = (" | Got: " + values.get(x));
 			} else if (commands.get(x).contains("nullValue")) {
 				if (values.get(x).contains("null")) {
 					match = "Pass";
 					numCorrect++;
 				}
-			}else if (commands.get(x).contains("static")) {
-				if(arguments.get(x).contains(values.get(x))) {
+			} else if (commands.get(x).contains("static")) {
+				if (arguments.get(x).contains(values.get(x))) {
 					numCorrect++;
-					match="Pass"; 
-				}else {				
+					match = "Pass";
+				} else {
 					expected = (" | Expected: " + arguments.get(x) + "  Got: " + values.get(x));
 				}
 			}
-		
-			numWrong=numValues-numCorrect-numUntested;
+
+			numWrong = numValues - numCorrect - numUntested;
 			String test = ("Test " + (x + 1) + "/" + numValues + ": " + names.get(x) + " | " + match + " " + expected);
 			results.add(test);
 		}
 		results.add("Testing complete: " + numCorrect + " out of " + numValues + " correct.");
-		results.add(numWrong+" out of "+numValues+" failed.");
-		results.add(numUntested+" out of "+numValues+" untested.");
+		results.add(numWrong + " out of " + numValues + " failed.");
+		results.add(numUntested + " out of " + numValues + " untested.");
 		JFrame logTester = new JFrame("ViewSpot Automator- Log Testing " + d.getDevice());// Setup window
 		logTester.setSize(763, 567);
 		GridBagLayout gridBagLayout = new GridBagLayout();

@@ -2,7 +2,11 @@ package viewspotautomator;
 
 import java.util.Comparator;
 import se.vidstige.jadb.managers.Package;
-
+/**
+ * A comparator to put jadb.Package classes in order. Used in PackageListManager.
+ * @author shill
+ *
+ */
 public class PackComparator implements Comparator<Package> {
 
 	@Override

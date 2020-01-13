@@ -224,6 +224,14 @@ public class TaskProcessor {
 
 		return result;
 	}
+	
+	public static String getBatteryLevel(Device d) throws IOException, JadbException {
+		String raw=convertStreamToString(d.getDevice().executeShell("dumpsys battery |grep ","level:"));
+		raw = raw.replaceAll("\\D+","");
+		System.out.println(raw);
+		Double level=Math.round((Double.valueOf(raw)/1000) * 100d) / 100d;
+		return(level.toString());		
+	}
 
 	public static String tester(Device d) throws IOException, JadbException {
 

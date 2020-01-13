@@ -20,13 +20,17 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+/**
+ * This class is a GUI for connecting devices to wifi networks. It also saves previously connected networks to disk. 
+ * @author shill
+ *
+ */
 public class WifiManager {
 	private JTextField ssidSelector;
 	private JTextField passwordSelector;
-	private ArrayList<WifiNetwork> nets = new ArrayList<WifiNetwork>();
-	private WifiNetwork selected;
-	private Boolean fileAlready = false;
+	private ArrayList<WifiNetwork> nets = new ArrayList<WifiNetwork>(); //List of networks to connect to
+	private WifiNetwork selected;// Currently selected networks
+	private Boolean fileAlready = false;//Has a file already been created to store saved networks
 
 	@SuppressWarnings("rawtypes")
 	public WifiManager(Device d) {
