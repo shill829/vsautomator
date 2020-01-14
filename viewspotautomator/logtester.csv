@@ -19,7 +19,7 @@ getprop ro.product.cpu.abi,
 getprop ro.product.cpu2.abi,
 getDataState,
 getprop ro.product.device,
-"service call iphonesubinfo 1 | awk -F """"'"""" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=",
+manualtest,
 getprop ro.build.display.id,
 getprop ro.build.fingerprint,
 getprop ro.build.version.release,
@@ -32,7 +32,7 @@ dumpsys battery | grep -m 1,'powered: true'
 nullValue,
 manualtest,
 dumpsys location | grep -E -o,"horizontalAccuracyMeters:.{0,8}"
-dumpsys location | grep -E -o,"LatitudeDegrees:.{0,6}"
+dumpsys location | grep -E -o,"LatitudeDegrees:.{0,6}  "
 dumpsys location | grep -E -o,"LongitudeDegrees:.{0,6} "
 manualtest,
 getprop ro.product.manufacturer,
@@ -54,5 +54,5 @@ nullValue,
 manualtest,
 manualtest,
 manualtest,
-cat /proc/uptime |cut -c1-9 |tr -d .,
+cat /proc/uptime|cut,-c1-4,
 getprop ro.build.user,
