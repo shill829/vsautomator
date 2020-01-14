@@ -98,8 +98,8 @@ public class Automator {
 		queuedDevices.setBounds(403, 62, 221, 328);
 		primary.getContentPane().add(queuedDevices);
 
-		JLabel queuedDevLbl = new JLabel("Queued Devices");
-		queuedDevLbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel queuedDevLbl = new JLabel("Queued Devices");//label
+		queuedDevLbl.setFont(new Font("Tahoma", Font.PLAIN, 14)); 
 		queuedDevLbl.setBounds(396, 29, 238, 35);
 		primary.getContentPane().add(queuedDevLbl);
 
@@ -208,7 +208,7 @@ public class Automator {
 		doBlockerOff.setBounds(535, 401, 89, 23);
 		primary.getContentPane().add(doBlockerOff);
 
-		JButton doWifiOn = new JButton("Wifi On");
+		JButton doWifiOn = new JButton("Wifi On"); //turn wifi radio on 
 		doWifiOn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
@@ -229,7 +229,7 @@ public class Automator {
 		doWifiOn.setBounds(403, 424, 89, 23);
 		primary.getContentPane().add(doWifiOn);
 
-		JButton doWifiOff = new JButton("Wifi off");
+		JButton doWifiOff = new JButton("Wifi off");//turn wifi radio off
 		doWifiOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
@@ -250,7 +250,7 @@ public class Automator {
 		doWifiOff.setBounds(535, 423, 89, 23);
 		primary.getContentPane().add(doWifiOff);
 
-		JButton doZonaYoo = new JButton("ZonaYoo");
+		JButton doZonaYoo = new JButton("ZonaYoo"); //connect to ZonaYoo network
 		doZonaYoo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
@@ -282,7 +282,7 @@ public class Automator {
 		doZonaYoo.setBounds(403, 449, 89, 23);
 		primary.getContentPane().add(doZonaYoo);
 
-		JButton doSmsiTest = new JButton("Smsitestpsk");
+		JButton doSmsiTest = new JButton("Smsitestpsk"); //connect to SMSI_TESTPSK network
 		doSmsiTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int x = 0; x < queueDevList.size(); x++) {
