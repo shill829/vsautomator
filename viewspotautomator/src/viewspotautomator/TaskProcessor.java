@@ -114,6 +114,20 @@ public class TaskProcessor {
 	public static void launchApp(Device d, Package p) throws IOException, JadbException {
 		d.getDevice().executeShell("monkey -p " + p + " -c android.intent.category.LAUNCHER 1", "");
 	}
+	
+	
+	public static void viewSpotLaunch(Device d) throws IOException, JadbException {
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.ACCESS_COARSE_LOCATION","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.ACCESS_FINE_LOCATION","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.CALL_PHONE","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_EXTERNAL_STORAGE","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_SECURE_SETTINGS","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_SETTINGS","");
+			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.SYSTEM_ALERT_WINDOW","");
+			d.getDevice().executeShell("monkey -p " + d.getPackName() + " -c android.intent.category.LAUNCHER 1", "");
+	}
+	
+	
 
 	public static String isSettingsBlockerOn(Device d) throws IOException, JadbException {// check if ViewSpot settings
 																							// blocker is enabled
@@ -208,6 +222,8 @@ public class TaskProcessor {
 	public static void rebootDevice(Device d) throws IOException, JadbException {
 		d.getDevice().executeShell("reboot -p", "");
 	}
+	
+	
 
 	public static String getChargeType(Device d) throws IOException, JadbException {
 		String rawString = convertStreamToString(d.getDevice().execute("dumpsys battery | grep", "powered:"));

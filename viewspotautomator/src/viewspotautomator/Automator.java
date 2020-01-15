@@ -560,6 +560,7 @@ public class Automator {
 		if (devices.size() < 1) {
 			throw new NoDevicesException("Error: No Devices found");
 		}
+		
 	}
 
 	@PostConstruct
