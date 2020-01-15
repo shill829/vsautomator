@@ -11,7 +11,8 @@ import se.vidstige.jadb.managers.Package;
 import se.vidstige.jadb.managers.PackageManager;
 
 /**
- * This class is responsible for running many different tasks on Android devices. It is used by most of the other classes in the package.r.
+ * This class is responsible for running many different tasks on Android
+ * devices. It is used by most of the other classes in the package.r.
  * 
  * @author shill
  *
@@ -54,8 +55,13 @@ public class TaskProcessor {
 				combinedData[1] = "com.smithmicro.viewspot.orange.esp";
 				combinedData[2] = getVersion(d, "com.smithmicro.viewspot.orange.esp");
 				break;
-			}
+			} else if (installedApps.get(x).toString().contains("com.customermobile.vzw.showcase")) {
+				combinedData[0] = "Verizon";
+				combinedData[1] = "com.customermobile.vzw.showcase";
+				combinedData[2] = getVersion(d, "com.customermobile.vzw.showcase");
+				break;
 
+			}
 		}
 
 		return combinedData;
@@ -114,20 +120,17 @@ public class TaskProcessor {
 	public static void launchApp(Device d, Package p) throws IOException, JadbException {
 		d.getDevice().executeShell("monkey -p " + p + " -c android.intent.category.LAUNCHER 1", "");
 	}
-	
-	
+
 	public static void viewSpotLaunch(Device d) throws IOException, JadbException {
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.ACCESS_COARSE_LOCATION","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.ACCESS_FINE_LOCATION","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.CALL_PHONE","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_EXTERNAL_STORAGE","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_SECURE_SETTINGS","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.WRITE_SETTINGS","");
-			d.getDevice().executeShell("pm grant "+d.getPackName()+" android.permission.SYSTEM_ALERT_WINDOW","");
-			d.getDevice().executeShell("monkey -p " + d.getPackName() + " -c android.intent.category.LAUNCHER 1", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.ACCESS_COARSE_LOCATION", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.ACCESS_FINE_LOCATION", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.CALL_PHONE", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.WRITE_EXTERNAL_STORAGE", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.WRITE_SECURE_SETTINGS", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.WRITE_SETTINGS", "");
+		d.getDevice().executeShell("pm grant " + d.getPackName() + " android.permission.SYSTEM_ALERT_WINDOW", "");
+		d.getDevice().executeShell("monkey -p " + d.getPackName() + " -c android.intent.category.LAUNCHER 1", "");
 	}
-	
-	
 
 	public static String isSettingsBlockerOn(Device d) throws IOException, JadbException {// check if ViewSpot settings
 																							// blocker is enabled
@@ -216,14 +219,12 @@ public class TaskProcessor {
 		d.getDevice().executeShell("am start -n " + d.getPackName() + "/com.customermobile.demo.MainTab", "");
 		d.getDevice().executeShell("input tap 400 400", "");
 		d.getDevice().executeShell("input keyevent KEYCODE_HOME", "");
-		d.getDevice().executeShell("monkey -p "+d.getPackName()+" -c android.intent.category.LAUNCHER 1", "");
+		d.getDevice().executeShell("monkey -p " + d.getPackName() + " -c android.intent.category.LAUNCHER 1", "");
 	}
 
 	public static void rebootDevice(Device d) throws IOException, JadbException {
 		d.getDevice().executeShell("reboot -p", "");
 	}
-	
-	
 
 	public static String getChargeType(Device d) throws IOException, JadbException {
 		String rawString = convertStreamToString(d.getDevice().execute("dumpsys battery | grep", "powered:"));
@@ -240,13 +241,13 @@ public class TaskProcessor {
 
 		return result;
 	}
-	
+
 	public static String getBatteryLevel(Device d) throws IOException, JadbException {
-		String raw=convertStreamToString(d.getDevice().executeShell("dumpsys battery |grep ","level:"));
-		raw = raw.replaceAll("\\D+","");
+		String raw = convertStreamToString(d.getDevice().executeShell("dumpsys battery |grep ", "level:"));
+		raw = raw.replaceAll("\\D+", "");
 		System.out.println(raw);
-		Double level=Math.round((Double.valueOf(raw)/1000) * 100d) / 100d;
-		return(level.toString());		
+		Double level = Math.round((Double.valueOf(raw) / 1000) * 100d) / 100d;
+		return (level.toString());
 	}
 
 	public static String tester(Device d) throws IOException, JadbException {
