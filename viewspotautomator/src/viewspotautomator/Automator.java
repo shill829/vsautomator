@@ -545,7 +545,7 @@ public class Automator {
 		
 		for (int x = 0; x < toConvert.size(); x++) {
 			devices.add(new Device(toConvert.get(x)));
-			devices.get(x).getDevice().executeShell("settings put system screen_off_timeout 15000", "");
+			devices.get(x).getDevice().executeShell("settings put system screen_off_timeout 150000", "");
 
 		}
 		/*
@@ -560,6 +560,14 @@ public class Automator {
 		if (devices.size() < 1) {
 			throw new NoDevicesException("Error: No Devices found");
 		}
+		UIAutomator uiauto=new UIAutomator(devices.get(0));
+		uiauto.keyEvent(3);
+	    uiauto.longTouchButton("Device Alive");
+		uiauto.touchButton("Viewspot");
+		uiauto.touchButton("Enter");
+	    uiauto.enterText("Shmuzy_1");
+	    uiauto.pushEnter();
+		
 		
 	}
 

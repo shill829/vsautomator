@@ -70,5 +70,9 @@ public class Device {
 	public String getBlockerStatus() throws IOException, JadbException {
 		return TaskProcessor.isSettingsBlockerOn(this);
 	}
+	
+	public String getModelNumber(){
+		return modelNumber;
+	}
 
 }

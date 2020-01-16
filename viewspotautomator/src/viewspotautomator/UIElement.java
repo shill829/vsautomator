@@ -13,6 +13,7 @@ public class UIElement {
 
 	public UIElement(String u) {
 		String unparsed = u;
+		//System.out.println(unparsed);
 		Boolean foundText = false;
 		if (u.contains("clickable=\"true\"")) {
 			clickable = true;
@@ -23,11 +24,11 @@ public class UIElement {
 		if (u.contains("selected=\"true\"")) {
 			selected = true;
 		}
-		Scanner scan = new Scanner(unparsed);
+		Scanner scan = new Scanner(unparsed).useDelimiter("\" ");
 		while (scan.hasNext()) {
 			String test = scan.next();
 			if (test.contains("text=") && !foundText) {
-				String[] s = test.split("text=", 2);
+				String[] s = test.split("text=\"", 2);
 				text = s[1].replaceAll("\"", "");
 				foundText = true;
 			} else if (test.contains("content-desc=")) {
