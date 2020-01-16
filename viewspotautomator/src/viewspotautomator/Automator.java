@@ -560,13 +560,13 @@ public class Automator {
 		if (devices.size() < 1) {
 			throw new NoDevicesException("Error: No Devices found");
 		}
-		UIAutomator uiauto=new UIAutomator(devices.get(0));
-		uiauto.keyEvent(3);
-	    uiauto.longTouchButton("Device Alive");
-		uiauto.touchButton("Viewspot");
-		uiauto.touchButton("Enter");
-	    uiauto.enterText("Shmuzy_1");
-	    uiauto.pushEnter();
+	//	UIAutomator uiauto=new UIAutomator(devices.get(0));
+	//	uiauto.keyEvent(3);
+	  //  uiauto.longTouchButton("Device Alive");
+	//	uiauto.touchButton("Viewspot");
+	//	uiauto.touchButton("Enter");
+	 //   uiauto.enterText("Shmuzy_1");
+	  //  uiauto.pushEnter();
 		
 		
 	}

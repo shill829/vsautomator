@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.util.Scanner;
 import se.vidstige.jadb.JadbException;
 import se.vidstige.jadb.RemoteFile;
-
+/**
+ * 
+ * UIautomator is used for interacting with device GUIs
+ * @author shill
+ *
+ */
 public class UIAutomator {
 	private ArrayList<UIElement> entries = new ArrayList<UIElement>();
 	private Device dev;
@@ -23,8 +28,7 @@ public class UIAutomator {
 			System.out.println(dev.getModelNumber().trim()+s[0].trim());
 				if(s[0].trim().contains(dev.getModelNumber().trim())) {
 					enterX=Integer.parseInt(s[1].trim());
-					enterY=Integer.parseInt(s[2].trim());
-					System.out.println("THROING");
+					enterY=Integer.parseInt(s[2].trim());					
 				}		
 		}
 		scan.close();
@@ -44,20 +48,27 @@ public class UIAutomator {
 			e.printStackTrace();
 		}
 		dev.getDevice().pull(remote, windowdump);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(windowdump).useDelimiter("<node");
+		Scanner scan = new Scanner(windowdump,"utf-8").useDelimiter("<node");
 
 		while (scan.hasNext()) {
-			entries.add(new UIElement(scan.next().replaceAll("</node>", "").replaceAll("</hierarchy>", "")
+			String throin=scan.next();
+			entries.add(new UIElement(throin.replaceAll("</node>", "").replaceAll("</hierarchy>", "")
 					.replaceAll("/>", "").replaceAll("<", "").replaceAll(">", "")));
 		}
 		if (entries.size() > 0) {
 			entries.remove(0);
 		}
 		scan.close();
-		//for (int i = 0; i < entries.size(); i++) {
-		//	System.out.println(entries.get(i));
-		//}
+		for (int i = 0; i < entries.size(); i++) {
+			System.out.println(entries.get(i));
+		}
 
 	}
 

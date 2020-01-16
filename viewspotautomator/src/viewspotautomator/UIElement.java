@@ -13,7 +13,7 @@ public class UIElement {
 
 	public UIElement(String u) {
 		String unparsed = u;
-		//System.out.println(unparsed);
+		System.out.println(unparsed);
 		Boolean foundText = false;
 		if (u.contains("clickable=\"true\"")) {
 			clickable = true;
