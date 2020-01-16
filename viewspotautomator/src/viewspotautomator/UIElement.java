@@ -11,6 +11,7 @@ public class UIElement {
 	private int xcenter=0;
 	private int ycenter=0;
 
+	@SuppressWarnings("resource")
 	public UIElement(String u) {
 		String unparsed = u;
 		System.out.println(unparsed);
